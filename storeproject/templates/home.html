@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <h1 style="color:SlateBlue">Welcome to ABC Store</h1>
+    <center>
+        <img src="{% static 'img/Welcome to ABC.png' %}" alt="logimage" style="height:500px; width:100% ">
+    </center>
+<center>
+    <button type="button" class="btn btn-warning" onclick="location.href='/login/'">Login</button>
+</center>
+{% endblock %}

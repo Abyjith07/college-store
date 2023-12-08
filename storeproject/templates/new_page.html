@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<center>
+    <h1>Student Form</h1>
+    <form method="post" action="{% url 'new_page' %}">
+        {% csrf_token %}
+        <div class="form-group">
+        <input type="text" class="form-control" id="name" name="name" placeholder="Name" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="dob" name="dob" placeholder="Date of Birth" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="age" name="age" placeholder="Age" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="gender" name="gender" placeholder="Gender" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="phone_number" name="phone_number" placeholder="Phone Number" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="mail_id" name="mail_id" placeholder="Mail ID" required>
+        </div>
+        <div class="form-group">
+        <input type="text" class="form-control" id="address" name="address" placeholder="Address" required>
+        </div>
+        <label for="department">Department:</label>
+        <select id="department" name="department">
+            {% for department in departments %}
+                <option value="{{ department.id }}">{{ department.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="course">Course:</label>
+        <select id="course" name="course">
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+            {% endfor %}
+        </select><br><br>
+        <label for="purpose">Purpose:</label>
+        <select id="purpose" name="purpose">
+            <option value="Enquiry">Enquiry</option>
+            <option value="Place Order">Place Order</option>
+            <option value="Return">Return</option>
+        </select><br><br>
+        <label for="materials_provide">Materials Provide:</label><br>
+            <input type="checkbox" id="debit_notebook" name="materials_provide" value="Debit Notebook">
+            <label for="debit_notebook">Notebook</label><br>
+            <input type="checkbox" id="pen" name="materials_provide" value="Pen">
+            <label for="pen">Pen</label><br>
+            <input type="checkbox" id="exam_papers" name="materials_provide" value="Exam Papers">
+            <label for="exam_papers">Exam Papers</label><br><br>
+            <input type="submit" value="Submit">
+    </form>
+<br>
+    <button onclick="location.href='{% url 'logout' %}'">Logout</button>
+    <img src="{% static 'img/Welcome to ABC Store.png' %}" alt="logimage" style="height:220px; width:100% ">
+</center>
+ <script>
+        var departmentDropdown = document.getElementById('department');
+        var courseDropdown = document.getElementById('course');
+
+        function fetchCourses() {
+            var departmentId = departmentDropdown.value;
+            var url = '/get_courses/' + departmentId + '/';
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    courseDropdown.innerHTML = '';
+
+                    data.forEach(course => {
+                        var option = document.createElement('option');
+                        option.value = course.id;
+                        option.textContent = course.name;
+                        courseDropdown.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        departmentDropdown.addEventListener('change', fetchCourses);
+
+        fetchCourses();
+    </script>
+{% endblock %}
